@@ -9,23 +9,41 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity,
 } from 'react-native';
+import { NativeModules } from 'react-native';
+const { PaymentManager } = NativeModules;
+
 
 export default class NativeView extends Component {
+  handlePress(e) {
+    PaymentManager.showPaymentViewController()
+      .then(res => {
+        console.group('resolved');
+        console.log(res);
+        console.groupEnd();
+      })
+      .catch(err => {
+        console.group('rejected');
+        console.log(err);
+        console.groupEnd();
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={{
+            backgroundColor: 'green',
+            padding: 10,
+          }}
+          onPress={this.handlePress}
+        >
+          <Text style={{ color: '#fff'}}>Go to payments</Text>
+        </TouchableOpacity>
       </View>
     );
   }
